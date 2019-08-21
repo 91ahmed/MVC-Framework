@@ -1,0 +1,128 @@
+==============
+[ Controller ]
+==============
+// Create controller
+--------------------
+namespace App\Controller;
+
+class HomeController extends Controller
+{
+	public function index ()
+	{
+		$data = [
+			'title' => 'mytitle',
+		];
+		
+		return $this->view('home', $data);
+	}		
+}
+	
+
+=========
+[ Model ]
+=========
+// Create model
+---------------
+namespace App\Model;
+
+use System\Model\Model;
+
+class User extends Model
+{
+	protected static $table = 'users';
+}
+	
+// Select Data
+---------------
+$users = User::select('username, email')
+			 ->join('table2', 'table2.id', '=', 'table1.id')
+			 ->leftJoin('table3', 'table3.id', '=', 'table1.id')
+			 ->rightJoin('table4', 'table4.id', '=', 'table1.id')
+			 ->where('column1', '=', 'value1')
+			 ->or('column2', '!=', 'value2')
+			 ->and('column3', '=', 'value3')
+			 ->groupBy('serial, username')
+			 ->having('id', '>', 100)
+			 ->or('id', '=', 40)
+			 ->and('id', '<', 300)
+			 ->orderBy('id', 'ASC')
+			 ->limit(12)
+			 ->get();
+			 
+			 
+// Pagination
+--------------
+$users = User::all()
+			 ->paginate(5);
+			 
+$users = User::select('username, email')
+			 ->where('username', '!=', 'ahmed')
+			 ->paginate(20);
+			 
+
+// Links number for pagination		
+$links = User::links();
+
+for ($i = 1; $i <= $links; $i++) 
+{
+	echo '<ul>';
+	echo '<li><a href="?page='.$i.'">'.$i.'</a></li>';
+	echo '</ul>';
+}
+
+// Insert Data
+---------------
+User::insert([
+	'username' => 'ahmed',
+	'email' => 'mido@gmail.com',
+	'password' => '12345678',
+])->save();
+
+// Update Data
+--------------
+User::update([
+	'username' => 'osama',
+	'email'    => 'osama932@yandex.com',
+	'password' => 'd97h873234d4d',
+])->where('username', '=', 'ahmed')->save();
+
+// Delete Data
+---------------
+User::delete()
+	->where('id', '=', 4)
+	->or('id', '=', 6)
+	->save();
+	
+	
+==============	
+[ Validation ]
+==============
+// Data validation
+-------------------
+$val = new Validation();
+$val->input('username')->maxLength(20)->minLength(5)->regex('~^[a-zA-Z\-\'\p{Arabic}]{1,60}$~iu')->required();
+$val->input('email')->maxLength(60)->email()->required();
+$val->input('password')->confirm('password_confirm')->maxLength(30)->minLength(8)->required();
+$val->input('date')->max(2019)->min(1925)->required();
+
+// Validation success
+----------------------
+if ($val->success())
+{
+	// if validation success do this
+}
+
+// display errors
+------------------
+$val->errors();
+
+
+
+==========
+[ Routes ]
+==========
+$route = new System\Routes\Route();
+
+$route->get('/', 'HomeController@index');
+$route->get('register', 'UsersController@index');
+$route->post('user/add', 'UsersController@add');
