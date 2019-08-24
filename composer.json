@@ -1,6 +1,7 @@
 {
     "require": {
         "firebase/php-jwt": "^5.0",
-        "phpmailer/phpmailer": "^6.0"
+        "phpmailer/phpmailer": "^6.0",
+        "swiftmailer/swiftmailer": "^6.0"
     }
 }

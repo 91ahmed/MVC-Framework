@@ -126,3 +126,25 @@ $route = new System\Routes\Route();
 $route->get('/', 'HomeController@index');
 $route->get('register', 'UsersController@index');
 $route->post('user/add', 'UsersController@add');
+
+
+
+==============
+[ SwiftMailer]
+==============
+use System\Mail_SwiftMailer\Mail_SwiftMailer;
+
+$mail = new Mail_SwiftMailer();
+$mail->fromName    = 'SwiftMailer';
+$mail->fromAddress = '91ahmedhassan@gmail.com';
+$mail->toName      = 'mido';
+$mail->toAddress   = 'ahmedh12491@gmail.com';
+$mail->subject     = 'Hi Ahmed';
+$mail->message     = '<h2>Message</h2>';
+$mail->SendMail();
+
+if($mail->error == ''){
+	echo 'Message sent successfully';
+}else{
+	echo $mail->error;
+}
